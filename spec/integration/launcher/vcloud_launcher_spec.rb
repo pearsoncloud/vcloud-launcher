@@ -2,23 +2,33 @@ require 'spec_helper'
 require 'pp'
 require 'erb'
 require 'ostruct'
+require 'vcloud/tools/tester'
 
 describe Vcloud::Launcher::Launch do
   context "with minimum input setup" do
     it "should provision vapp with single vm" do
-      test_data_1 = define_test_data
-      minimum_data_erb = File.join(File.dirname(__FILE__), 'data/minimum_data_setup.yaml.erb')
+      parameters = Vcloud::Tools::Tester::
+        TestParameters.new('vcloud_tools_testing_config.yaml')
+      vapp_name = "vapp-vcloud-tools-tests-#{Time.now.strftime('%s')}"
+      test_data_1 = {
+        vapp_name: vapp_name,
+        vdc_name: parameters.vdc_name,
+        catalog: parameters.catalog,
+        vapp_template: parameters.catalog_item
+      }
+      minimum_data_erb = File.join(File.dirname(__FILE__),
+        'data/minimum_data_setup.yaml.erb')
       @minimum_data_yaml = ErbHelper.convert_erb_template_to_yaml(test_data_1, minimum_data_erb)
       @fog_interface = Vcloud::Fog::ServiceInterface.new
 
       Vcloud::Launcher::Launch.new.run(@minimum_data_yaml, {"dont-power-on" => true})
 
-      vapp_query_result = @fog_interface.get_vapp_by_name_and_vdc_name(test_data_1[:vapp_name], test_data_1[:vdc_name])
+      vapp_query_result = @fog_interface.get_vapp_by_name_and_vdc_name(vapp_name, parameters.vdc_name)
       @provisioned_vapp_id = vapp_query_result[:href].split('/').last
       provisioned_vapp = @fog_interface.get_vapp @provisioned_vapp_id
 
       provisioned_vapp.should_not be_nil
-      provisioned_vapp[:name].should == test_data_1[:vapp_name]
+      provisioned_vapp[:name].should == vapp_name
       provisioned_vapp[:Children][:Vm].count.should == 1
     end
 
@@ -32,7 +42,25 @@ describe Vcloud::Launcher::Launch do
 
   context "happy path" do
     before(:all) do
-      @test_data = define_test_data
+      parameters = Vcloud::Tools::Tester::
+        TestParameters.new('vcloud_tools_testing_config.yaml')
+      vapp_name = "vapp-vcloud-tools-tests-#{Time.now.strftime('%s')}"
+      date_metadata = DateTime.parse('2013-10-23 15:34:00 +0000')
+      bootstrap_script = File.join(File.dirname(__FILE__),
+        "data/basic_preamble_test.erb")
+      @test_data = {
+        vapp_name: vapp_name,
+        vdc_name: parameters.vdc_name,
+        catalog: parameters.catalog,
+        vapp_template: parameters.catalog_item,
+        date_metadata: date_metadata,
+        bootstrap_script: bootstrap_script,
+        network1: parameters.network1,
+        network1_ip: parameters.network1_ip,
+        network2: parameters.network2,
+        network2_ip: parameters.network2_ip,
+        storage_profile: parameters.storage_profile
+      }
       @config_yaml = ErbHelper.convert_erb_template_to_yaml(@test_data, File.join(File.dirname(__FILE__), 'data/happy_path.yaml.erb'))
       @fog_interface = Vcloud::Fog::ServiceInterface.new
       Vcloud::Launcher::Launch.new.run(@config_yaml, { "dont-power-on" => true })
@@ -139,19 +167,4 @@ describe Vcloud::Launcher::Launch do
     }.compact
   end
 
-  def define_test_data
-    {
-        vapp_name: "vapp-vcloud-tools-tests-#{Time.now.strftime('%s')}",
-        vdc_name: ENV['VCLOUD_VDC_NAME'],
-        catalog: ENV['VCLOUD_CATALOG_NAME'],
-        vapp_template: ENV['VCLOUD_TEMPLATE_NAME'],
-        network1: ENV['VCLOUD_NETWORK1_NAME'],
-        network2: ENV['VCLOUD_NETWORK2_NAME'],
-        network1_ip: ENV['VCLOUD_NETWORK1_IP'],
-        network2_ip: ENV['VCLOUD_NETWORK2_IP'],
-        storage_profile: ENV['VCLOUD_STORAGE_PROFILE_NAME'],
-        bootstrap_script: File.join(File.dirname(__FILE__), "data/basic_preamble_test.erb"),
-        date_metadata: DateTime.parse('2013-10-23 15:34:00 +0000')
-    }
-  end
 end

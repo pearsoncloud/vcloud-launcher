@@ -1,5 +1,7 @@
 source 'http://rubygems.org'
 
+gem 'vcloud-tools-tester', :path => '../vcloud-tools-tester'
+
 gemspec
 
 if ENV['VCLOUD_CORE_DEV_MASTER']

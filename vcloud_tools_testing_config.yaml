@@ -1,0 +1,9 @@
+default:
+  vdc_name:
+  catalog:
+  catalog_item:
+  network1:
+  network1_ip:
+  network2:
+  network2_ip:
+  storage_profile:
