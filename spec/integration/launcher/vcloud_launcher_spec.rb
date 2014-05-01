@@ -7,8 +7,9 @@ require 'vcloud/tools/tester'
 describe Vcloud::Launcher::Launch do
   context "with minimum input setup" do
     it "should provision vapp with single vm" do
+      @data_dir = File.join(File.dirname(__FILE__), "/data")
       parameters = Vcloud::Tools::Tester::
-        TestParameters.new('vcloud_tools_testing_config.yaml')
+        TestParameters.new("#{@data_dir}/vcloud_tools_testing_config.yaml")
       vapp_name = "vapp-vcloud-tools-tests-#{Time.now.strftime('%s')}"
       test_data_1 = {
         vapp_name: vapp_name,
@@ -16,8 +17,7 @@ describe Vcloud::Launcher::Launch do
         catalog: parameters.catalog,
         vapp_template: parameters.catalog_item
       }
-      minimum_data_erb = File.join(File.dirname(__FILE__),
-        'data/minimum_data_setup.yaml.erb')
+      minimum_data_erb = "#{@data_dir}/minimum_data_setup.yaml.erb"
       @minimum_data_yaml = ErbHelper.convert_erb_template_to_yaml(test_data_1, minimum_data_erb)
       @fog_interface = Vcloud::Fog::ServiceInterface.new
 
@@ -42,12 +42,12 @@ describe Vcloud::Launcher::Launch do
 
   context "happy path" do
     before(:all) do
+      @data_dir = File.join(File.dirname(__FILE__), "/data")
       parameters = Vcloud::Tools::Tester::
-        TestParameters.new('vcloud_tools_testing_config.yaml')
+        TestParameters.new("#{@data_dir}/vcloud_tools_testing_config.yaml")
       vapp_name = "vapp-vcloud-tools-tests-#{Time.now.strftime('%s')}"
       date_metadata = DateTime.parse('2013-10-23 15:34:00 +0000')
-      bootstrap_script = File.join(File.dirname(__FILE__),
-        "data/basic_preamble_test.erb")
+      bootstrap_script = "#{@data_dir}/basic_preamble_test.erb"
       @test_data = {
         vapp_name: vapp_name,
         vdc_name: parameters.vdc_name,
