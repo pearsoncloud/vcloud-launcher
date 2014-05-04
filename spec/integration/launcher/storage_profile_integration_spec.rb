@@ -88,7 +88,7 @@ def define_test_data
       vapp_name_2: "vdc-2-sp-#{Time.now.strftime('%s')}",
       vapp_name_3: "vdc-3-sp-#{Time.now.strftime('%s')}",
       vapp_name_4: "vdc-4-sp-#{Time.now.strftime('%s')}",
-      vdc_name_1: ENV['VDC_NAME_1'],
+      vdc_name_1: ENV['VCLOUD_VDC_NAME'],
       vdc_name_2: ENV['VDC_NAME_2'],
       catalog: ENV['VCLOUD_CATALOG_NAME'],
       vapp_template: ENV['VCLOUD_TEMPLATE_NAME'],
