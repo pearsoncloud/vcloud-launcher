@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Vcloud::Launcher::Launch do
   context "storage profile", :take_too_long => true do
     before(:all) do
+      @data_dir = File.join(File.dirname(__FILE__), "/data")
       @test_data = define_test_data
       @config_yaml = ErbHelper.convert_erb_template_to_yaml(@test_data, File.join(File.dirname(__FILE__), 'data/storage_profile.yaml.erb'))
       @fog_interface = Vcloud::Fog::ServiceInterface.new
@@ -83,20 +84,22 @@ describe Vcloud::Launcher::Launch do
 end
 
 def define_test_data
+  parameters = Vcloud::Tools::Tester::
+    TestParameters.new("#{@data_dir}/vcloud_tools_testing_config.yaml")
   {
       vapp_name_1: "vdc-1-sp-#{Time.now.strftime('%s')}",
       vapp_name_2: "vdc-2-sp-#{Time.now.strftime('%s')}",
       vapp_name_3: "vdc-3-sp-#{Time.now.strftime('%s')}",
       vapp_name_4: "vdc-4-sp-#{Time.now.strftime('%s')}",
-      vdc_name_1: ENV['VCLOUD_VDC_NAME'],
-      vdc_name_2: ENV['VDC_NAME_2'],
-      catalog: ENV['VCLOUD_CATALOG_NAME'],
-      vapp_template: ENV['VCLOUD_TEMPLATE_NAME'],
-      storage_profile: ENV['VCLOUD_STORAGE_PROFILE_NAME'],
-      vdc_1_sp_href: ENV['VDC_1_STORAGE_PROFILE_HREF'],
-      vdc_2_sp_href: ENV['VDC_2_STORAGE_PROFILE_HREF'],
-      default_storage_profile_name: ENV['DEFAULT_STORAGE_PROFILE_NAME'],
-      default_storage_profile_href: ENV['DEFAULT_STORAGE_PROFILE_HREF'],
+      vdc_name_1: parameters.vdc_name,
+      vdc_name_2: parameters.vdc_name_2,
+      catalog: parameters.catalog,
+      vapp_template: parameters.catalog_item,
+      storage_profile: parameters.storage_profile,
+      vdc_1_sp_href: parameters.vdc_1_storage_profile_href,
+      vdc_2_sp_href: parameters.vdc_2_storage_profile_href,
+      default_storage_profile_name: parameters.default_storage_profile_name,
+      default_storage_profile_href: parameters.default_storage_profile_href,
       nonsense_storage_profile: "nonsense-storage-profile-name",
       bootstrap_script: File.join(File.dirname(__FILE__), "data/basic_preamble_test.erb"),
   }
