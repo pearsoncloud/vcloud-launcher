@@ -15,7 +15,7 @@ describe Vcloud::Launcher::Launch do
         vapp_name: vapp_name,
         vdc_name: parameters.vdc_1_name,
         catalog: parameters.catalog,
-        vapp_template: parameters.catalog_item
+        vapp_template: parameters.vapp_template
       }
       minimum_data_erb = "#{@data_dir}/minimum_data_setup.yaml.erb"
       @minimum_data_yaml = ErbHelper.convert_erb_template_to_yaml(test_data_1, minimum_data_erb)
@@ -52,7 +52,7 @@ describe Vcloud::Launcher::Launch do
         vapp_name: vapp_name,
         vdc_name: parameters.vdc_1_name,
         catalog: parameters.catalog,
-        vapp_template: parameters.catalog_item,
+        vapp_template: parameters.vapp_template,
         date_metadata: date_metadata,
         bootstrap_script: bootstrap_script,
         network1: parameters.network1,

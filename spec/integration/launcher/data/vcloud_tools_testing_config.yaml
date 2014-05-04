@@ -2,7 +2,7 @@ default:
   vdc_1_name:
   vdc_2_name:
   catalog:
-  catalog_item:
+  vapp_template:
   network1:
   network1_ip:
   network2:

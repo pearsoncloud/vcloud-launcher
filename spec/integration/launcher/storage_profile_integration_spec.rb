@@ -94,7 +94,7 @@ def define_test_data
       vdc_1_name: parameters.vdc_1_name,
       vdc_2_name: parameters.vdc_2_name,
       catalog: parameters.catalog,
-      vapp_template: parameters.catalog_item,
+      vapp_template: parameters.vapp_template,
       storage_profile: parameters.storage_profile,
       vdc_1_sp_href: parameters.vdc_1_storage_profile_href,
       vdc_2_sp_href: parameters.vdc_2_storage_profile_href,
