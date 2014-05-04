@@ -1,6 +1,6 @@
 default:
-  vdc_name_1:
-  vdc_name_2:
+  vdc_1_name:
+  vdc_2_name:
   catalog:
   catalog_item:
   network1:

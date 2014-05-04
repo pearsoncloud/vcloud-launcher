@@ -13,7 +13,7 @@ describe Vcloud::Launcher::Launch do
       vapp_name = "vapp-vcloud-tools-tests-#{Time.now.strftime('%s')}"
       test_data_1 = {
         vapp_name: vapp_name,
-        vdc_name: parameters.vdc_name,
+        vdc_name: parameters.vdc_1_name,
         catalog: parameters.catalog,
         vapp_template: parameters.catalog_item
       }
@@ -23,7 +23,7 @@ describe Vcloud::Launcher::Launch do
 
       Vcloud::Launcher::Launch.new.run(@minimum_data_yaml, {"dont-power-on" => true})
 
-      vapp_query_result = @fog_interface.get_vapp_by_name_and_vdc_name(vapp_name, parameters.vdc_name)
+      vapp_query_result = @fog_interface.get_vapp_by_name_and_vdc_name(vapp_name, parameters.vdc_1_name)
       @provisioned_vapp_id = vapp_query_result[:href].split('/').last
       provisioned_vapp = @fog_interface.get_vapp @provisioned_vapp_id
 
@@ -50,7 +50,7 @@ describe Vcloud::Launcher::Launch do
       bootstrap_script = "#{@data_dir}/basic_preamble_test.erb"
       @test_data = {
         vapp_name: vapp_name,
-        vdc_name: parameters.vdc_name,
+        vdc_name: parameters.vdc_1_name,
         catalog: parameters.catalog,
         vapp_template: parameters.catalog_item,
         date_metadata: date_metadata,
