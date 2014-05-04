@@ -1,5 +1,6 @@
 default:
-  vdc_name:
+  vdc_name_1:
+  vdc_name_2:
   catalog:
   catalog_item:
   network1:
@@ -7,3 +8,7 @@ default:
   network2:
   network2_ip:
   storage_profile:
+  default_storage_profile_name:
+  default_storage_profile_href:
+  vdc_1_storage_profile_href:
+  vdc_2_storage_profile_href:
