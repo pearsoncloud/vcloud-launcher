@@ -7,8 +7,9 @@ describe Vcloud::Launcher::Launch do
   context "with minimum input setup" do
     it "should provision vapp with single vm" do
       @data_dir = File.join(File.dirname(__FILE__), "/data")
-      parameters = Vcloud::Tools::Tester::
-        TestParameters.new("#{@data_dir}/vcloud_tools_testing_config.yaml")
+      config_file = File.join(File.dirname(__FILE__),
+        "../vcloud_tools_testing_config.yaml")
+      parameters = Vcloud::Tools::Tester::TestParameters.new(config_file)
       vapp_name = "vapp-vcloud-tools-tests-#{Time.now.strftime('%s')}"
       test_data_1 = {
         vapp_name: vapp_name,
@@ -42,8 +43,9 @@ describe Vcloud::Launcher::Launch do
   context "happy path" do
     before(:all) do
       @data_dir = File.join(File.dirname(__FILE__), "/data")
-      parameters = Vcloud::Tools::Tester::
-        TestParameters.new("#{@data_dir}/vcloud_tools_testing_config.yaml")
+      config_file = File.join(File.dirname(__FILE__),
+        "../vcloud_tools_testing_config.yaml")
+      parameters = Vcloud::Tools::Tester::TestParameters.new(config_file)
       vapp_name = "vapp-vcloud-tools-tests-#{Time.now.strftime('%s')}"
       date_metadata = DateTime.parse('2013-10-23 15:34:00 +0000')
       bootstrap_script = "#{@data_dir}/basic_preamble_test.erb"

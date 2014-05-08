@@ -3,7 +3,6 @@ require 'spec_helper'
 describe Vcloud::Launcher::Launch do
   context "storage profile", :take_too_long => true do
     before(:all) do
-      @data_dir = File.join(File.dirname(__FILE__), "/data")
       @test_data = define_test_data
       @config_yaml = ErbHelper.convert_erb_template_to_yaml(@test_data, File.join(File.dirname(__FILE__), 'data/storage_profile.yaml.erb'))
       @fog_interface = Vcloud::Fog::ServiceInterface.new
@@ -84,8 +83,9 @@ describe Vcloud::Launcher::Launch do
 end
 
 def define_test_data
-  parameters = Vcloud::Tools::Tester::
-    TestParameters.new("#{@data_dir}/vcloud_tools_testing_config.yaml")
+  config_file = File.join(File.dirname(__FILE__),
+    "../vcloud_tools_testing_config.yaml")
+  parameters = Vcloud::Tools::Tester::TestParameters.new(config_file)
   {
       vapp_name_1: "vdc-1-sp-#{Time.now.strftime('%s')}",
       vapp_name_2: "vdc-2-sp-#{Time.now.strftime('%s')}",
